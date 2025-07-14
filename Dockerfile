@@ -1,6 +1,7 @@
-FROM node:16
+FROM node:16.17.1
 WORKDIR /app
 COPY ./package*.json ./
-RUN yarn install
+COPY ./node_modules ./node_modules
+#RUN yarn install
 COPY src ./src
-CMD ["npm", "start"]
+#CMD ["npm", "start"]

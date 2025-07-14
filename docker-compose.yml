@@ -10,7 +10,7 @@ services:
   app:
     container_name: app
     restart: always
-    image: ghcr.io/lacchain/ssi-api:latest
+    image: ssi-api-pkd:1.0
     ports:
       - '8080:8080'
     environment:
@@ -19,5 +19,10 @@ services:
       ACCOUNT_PRIVATE_ENCRYPTION_KEY: ""
       ACCOUNT_PRIVATE_KEY: ""
       ACCOUNT_PUBLIC_ENCRYPTION_KEY: ""
+      NETWORK_RPC: ""
+      NODE_ADDRESS: ""
+      NODE_EXPIRATION: 
+    command: >
+      sh -c "npm start"
     links:
       - mongo

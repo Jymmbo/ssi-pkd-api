@@ -1,9 +1,7 @@
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
-import VCRouter from "./routes/vc.js";
 import PKIRouter from "./routes/pki.js";
-import RegistryRouter from "./routes/registry.js";
 import IndexRouter from "./routes/index.js";
 import Logger from "./util/logger.js";
 import config from "./config.js";
@@ -13,9 +11,7 @@ import { initServices } from "./services/index.js";
 
 const logger = new Logger();
 const app = express();
-const vcRouter = new VCRouter( logger.instance() );
 const pkiRouter = new PKIRouter( logger.instance() );
-const registryRouter = new RegistryRouter( logger.instance() );
 const indexRouter = new IndexRouter( logger.instance() );
 
 app.use( cors() );
@@ -37,8 +33,6 @@ app.use( function( req, res, next ) {
 
 app.use( '/', indexRouter.getRouter() );
 app.use( '/pki', pkiRouter.getRouter() );
-app.use( '/vc', vcRouter.getRouter() );
-app.use( '/registry', registryRouter.getRouter() );
 
 try {
   if( !config.server.ssl.enabled ) {

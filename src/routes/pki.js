@@ -42,9 +42,12 @@ export default class PKIRouter extends Router {
   async pkdRegister( req ) {
     const { address } = req.params;
     const entity = req.body;
-    //const pkd = await pkdService.getPKD( address );
-    //if( !pkd ) throw new APIError( "PKD not found or invalid address", 1, 404 );
-    return pkdService.registerEntity( { address }, entity );
+    const pkd = await pkdService.getPKD( address );
+    if( !pkd ) throw new APIError( "PKD not found or invalid address", 1, 404 );
+    const blockchaintxhash = pkdService.registerEntity( { address }, entity );
+    pkd.entities.push( entity.address );
+    await pkd.save();
+    return blockchaintxhash;
   }
 
   async pkdRevoke( req ) {

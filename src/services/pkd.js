@@ -10,7 +10,7 @@ export default class PKDService {
     const PDKContract = config.network.nodeAddress ?
       new ethers.ContractFactory( PKD_CONTRACT_GAS.abi, PKD_CONTRACT_GAS.bytecode, signer ) :
       new ethers.ContractFactory( PKD_CONTRACT.abi, PKD_CONTRACT.bytecode, signer );
-    const pkd = await PDKContract.deploy( { gasPrice: 0 } );
+    const pkd = await PDKContract.deploy( { gasLimit: 3000000, gasPrice: 0 } );
     const receipt = await pkd.deployTransaction.wait();
     const pki = new PKI( { kind: 'PKD', address: receipt.contractAddress, hash: receipt.transactionHash } );
     await pki.save();
@@ -51,8 +51,6 @@ export default class PKDService {
       new ethers.Contract( pkd.address, PKD_CONTRACT_GAS.abi, signer ) :
       new ethers.Contract( pkd.address, PKD_CONTRACT.abi, signer );
     const tx = await contract.register( address, did, expires, { gasLimit: 1000000 } );
-    pkd.entities.push( address );
-    await pkd.save();
     return { hash: tx.hash };
   }
 
@@ -61,7 +59,7 @@ export default class PKDService {
       new ethers.Contract( pkd.address, PKD_CONTRACT_GAS.abi, signer ) :
       new ethers.Contract( pkd.address, PKD_CONTRACT.abi, signer );
     const tx = await contract.revoke( address );
-    return tx.hash;
+    return { hash: tx.hash };
   }
 
 }
